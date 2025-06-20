@@ -60,12 +60,13 @@ int main() {
     configASSERT(xJoystickQueue);
     configASSERT(xCarStatusQueue);
   
-    xTaskCreate(vJoystickTask, "JoystickTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 3, NULL);
-    xTaskCreate(vCarControlTask, "CarControlTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(vCarIndicatorsTask, "CarIndicatorsTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
-    xTaskCreate(vOledTask, "OledTask", configMINIMAL_STACK_SIZE + 200, NULL, tskIDLE_PRIORITY + 1, NULL);
-    xTaskCreate(vMonitorJoystickTask, "MonitorJoystickTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
-    xTaskCreate(vEngineSoundTask, "EngineSoundTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(vJoystickTask,         "JoystickTask",         configMINIMAL_STACK_SIZE,       NULL, tskIDLE_PRIORITY + 3, NULL);
+    //xTaskCreate(vCarControlTask,       "CarControlTask",       configMINIMAL_STACK_SIZE,       NULL, tskIDLE_PRIORITY + 2, NULL);
+    //xTaskCreate(vEngineSoundTask,      "EngineSoundTask",      configMINIMAL_STACK_SIZE,       NULL, tskIDLE_PRIORITY + 2, NULL);
+    //xTaskCreate(vCarIndicatorsTask,    "CarIndicatorsTask",    configMINIMAL_STACK_SIZE,       NULL, tskIDLE_PRIORITY + 1, NULL);
+    //xTaskCreate(vOledTask,             "OledTask",             configMINIMAL_STACK_SIZE + 200, NULL, tskIDLE_PRIORITY + 1, NULL);
+    //xTaskCreate(vMonitorJoystickTask,  "MonitorJoystickTask",  configMINIMAL_STACK_SIZE,       NULL, tskIDLE_PRIORITY,     NULL);
+
 
     vTaskStartScheduler();
 
