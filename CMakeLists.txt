@@ -47,7 +47,6 @@ add_executable(embarcatech-tarefa-freertos-2
         oled/ssd1306.c
         src/joystick_task.c
         #src/car_indicators_task.c
-        # src/car_status_data.h
         #src/car_control_task.c
         #src/oled_task.c
         #src/led_matrix_task.c
