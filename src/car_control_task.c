@@ -17,7 +17,7 @@ extern QueueHandle_t xCarStatusQueue;
 #define DRAG_RATE               0.015f
 #define MIN_RPM                 900
 #define MAX_RPM                 5500
-#define RPM_PER_KMH             36
+//#define RPM_PER_KMH             36
 #define GEAR_1_MAX_SPEED        20
 #define GEAR_2_MAX_SPEED        40
 #define GEAR_3_MAX_SPEED        70
@@ -47,6 +47,12 @@ void vCarControlTask(void *pvParameters) {
 
     while (true) {
         if (xQueueReceive(xJoystickQueue, &received_joystick_data, 0) == pdPASS) {
+            static bool first_input = true;
+            if (first_input) {
+                printf("CarControlTask: Recebeu primeiro dado do joystick\n");
+                first_input = false;
+            }
+
             int16_t joystick_y = received_joystick_data.y_axis;
 
             // Lógica de ABS (botão A)
@@ -95,36 +101,28 @@ void vCarControlTask(void *pvParameters) {
             // Detecta troca de marcha
             bool gear_changed = (calculated_gear != previous_gear);
 
-            // Simula tempo de engate e corte de aceleração
+            // Simula tempo de engate
             if (gear_changed && previous_gear != 0) {
-                // Engate: brevíssimo delay
-                vTaskDelay(pdMS_TO_TICKS(100));
-
-                // Cut de aceleração: RPM quase zero momentaneamente
-                current_car_status.current_rpm = MIN_RPM;
-                xQueueOverwrite(xCarStatusQueue, &current_car_status);
-                vTaskDelay(pdMS_TO_TICKS(50)); // Simula corte breve
+                vTaskDelay(pdMS_TO_TICKS(100)); // apenas delay de engate
             }
 
-            // Atualiza a marcha após simulação
+            // Atualiza marcha
             current_car_status.current_gear = calculated_gear;
 
-            // Novo cálculo de RPM baseado na marcha
-            float gear_ratio[] = {0.0f, 5.0f, 4.0f, 3.0f, 2.2f, 1.6f}; // N, 1 a 5
-
+            // Calcula RPM final
             if (calculated_gear > 0) {
                 calculated_rpm = MIN_RPM + (int)(current_speed_float * gear_ratio[calculated_gear]);
                 if (calculated_rpm > MAX_RPM) calculated_rpm = MAX_RPM;
             } else {
                 calculated_rpm = MIN_RPM;
             }
-
             current_car_status.current_rpm = calculated_rpm;
 
 
             // Lógica de Airbag (botão B)
             if (received_joystick_data.button_B_state && !airbag_was_deployed_once) {
                 airbag_was_deployed_once = true;
+                printf("Airbag: Disparado!\n");
             }
             current_car_status.airbag_deployed = airbag_was_deployed_once;
 

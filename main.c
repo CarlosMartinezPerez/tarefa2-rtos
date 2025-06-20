@@ -27,14 +27,15 @@ void vMonitorJoystickTask(void *pvParameters) {
                    received_joystick_data.button_B_state);
         }
         if (xQueueReceive(xCarStatusQueue, &received_car_status, 0) == pdPASS) {
-            printf("Monitor Car: Speed=%d Km/h, RPM=%d, Gear=%d, ABS=%d, Airbag=%d, Horn=%d\n",
-                   received_car_status.current_speed_kmh,
-                   received_car_status.current_rpm,
-                   received_car_status.current_gear,
-                   received_car_status.abs_active,
-                   received_car_status.airbag_deployed,
-                   received_car_status.horn_active,
-                   received_car_status.red_led_active);
+            printf("🚗 Monitor Car:\n");
+            printf("   Velocidade:   %3d km/h\n", received_car_status.current_speed_kmh);
+            printf("   RPM:          %4d\n",     received_car_status.current_rpm);
+            printf("   Marcha:       %d\n",       received_car_status.current_gear);
+            printf("   ABS:          %s\n",       received_car_status.abs_active ? "ATIVO" : "inativo");
+            printf("   Airbag:       %s\n",       received_car_status.airbag_deployed ? "DISPARADO" : "ok");
+            printf("   Buzina:       %s\n",       received_car_status.horn_active ? "LIGADA" : "desligada");
+            printf("   LED Vermelho: %s\n",       received_car_status.red_led_active ? "aceso" : "apagado");
+            printf("-----------------------------------\n");
         }
         vTaskDelay(pdMS_TO_TICKS(500)); // Imprime a cada 500ms
     }
@@ -42,7 +43,7 @@ void vMonitorJoystickTask(void *pvParameters) {
 
 int main() {
     stdio_init_all();
-    sleep_ms(1000);
+    sleep_ms(3000);
     printf("Main: Inicializando sistema...\n");
 
     // Teste inicial do OLED

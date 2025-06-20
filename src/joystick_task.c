@@ -41,6 +41,7 @@ void vJoystickTask(void *pvParameters) {
     const TickType_t xFrequency = pdMS_TO_TICKS(50); // Lê a cada 50ms
     const TickType_t xPrintFrequency = pdMS_TO_TICKS(500); // Imprime a cada 500ms
     TickType_t xLastPrintTime = xLastWakeTime;
+    printf("JoystickTask: Iniciada...\n");
 
     while (true) {
         // Leitura do eixo Y
